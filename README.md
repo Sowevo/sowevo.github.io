@@ -1,1 +1,0 @@
-# sowevo.github.io
