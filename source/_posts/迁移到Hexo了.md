@@ -6,7 +6,7 @@ keywords: Hexo, Blog
 thumbnail: https://i.loli.net/2018/09/14/5b9b3c02f36d2.png
 categories: 网站
 ---
-![](https://i.loli.net/2018/09/14/5b9b3b06d269f.png)
+![](https://up.sowevo.com/history/5b9b3b06d269f.png)
 
 闲来无事,把博客从WordPress迁移到了Hexo
 WordPress对Markdown支持不太好,又得要个php服务器支持,费事\~\~\~

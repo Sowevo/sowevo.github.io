@@ -9,7 +9,7 @@ date: 2017-09-11 23:49:06
 tags:
 ---
 
-一直用aria2下载文件,aria2一直用的默认配置 协议用的是http 发现一些https的网站调用aria2的时候会因为http出现异常 比如这样 ![异常](https://i.loli.net/2017/09/11/59b6ab3777ab7.png) 要开启https,首先需要为自己的域名申请一个证书,没有域名的话就... 申请免费的证书有不少方法,我选择[SSL For Free](https://www.sslforfree.com/) 具体方法嘛 [利用SSL For Free工具3分钟获取Let's Encrypt免费SSL证书](http://www.laozuo.org/7742.html) 申请完毕之后得到一个压缩包,里面有私钥,证书,中间证书三个文件,保存起来下面用 接下来修改aria2的配置文件 加入
+一直用aria2下载文件,aria2一直用的默认配置 协议用的是http 发现一些https的网站调用aria2的时候会因为http出现异常 比如这样 ![异常](https://up.sowevo.com/history/59b6ab3777ab7.png) 要开启https,首先需要为自己的域名申请一个证书,没有域名的话就... 申请免费的证书有不少方法,我选择[SSL For Free](https://www.sslforfree.com/) 具体方法嘛 [利用SSL For Free工具3分钟获取Let's Encrypt免费SSL证书](http://www.laozuo.org/7742.html) 申请完毕之后得到一个压缩包,里面有私钥,证书,中间证书三个文件,保存起来下面用 接下来修改aria2的配置文件 加入
 
 ```
 # 是否启用 RPC 服务的 SSL/TLS 加密,

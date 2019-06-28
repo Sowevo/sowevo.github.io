@@ -20,7 +20,7 @@ ssh登陆之后,输入
 ```shell
 sudo raspi-config
 ```
-进入raspi-config设置工具 选择Interfacing Options –>VNC 启动vnc服务,开启远程桌面服务 ![](https://i.loli.net/2017/09/14/59ba27934b756.png) ![](https://i.loli.net/2017/09/14/59ba2db359497.png) 最后选择Finish退出,并重启系统..
+进入raspi-config设置工具 选择Interfacing Options –>VNC 启动vnc服务,开启远程桌面服务 ![](https://up.sowevo.com/history/59ba27934b756.png) ![](https://up.sowevo.com/history/59ba2db359497.png) 最后选择Finish退出,并重启系统..
 
 配置服务,开机启动
 =========
@@ -71,11 +71,11 @@ exit
 sudo chmod 755 /etc/init.d/vncserver
 sudo update-rc.d vncserver defaults
 ```
-最后重启树莓派~ 正常情况下重新启动之后就可以连接VNC了 打开你的VNC客户端,这里使用的Chrom拓展程序[VNC® Viewer for Google Chrome™](https://chrome.google.com/webstore/detail/vnc%C2%AE-viewer-for-google-ch/iabmpiboiopbgfabjmgeedhcmjenhbla?utm_source=chrome-app-launcher-info-dialog),不用额外安装,不错 输入你的ip注意不要忘记 **:1** 对应自己配置文件里面的控制台号码 ![vnc](https://i.loli.net/2017/09/15/59bb84dfe9196.png) 首次连接还会询问是否信任此设备,信任就行 输入用户信息 
+最后重启树莓派~ 正常情况下重新启动之后就可以连接VNC了 打开你的VNC客户端,这里使用的Chrom拓展程序[VNC® Viewer for Google Chrome™](https://chrome.google.com/webstore/detail/vnc%C2%AE-viewer-for-google-ch/iabmpiboiopbgfabjmgeedhcmjenhbla?utm_source=chrome-app-launcher-info-dialog),不用额外安装,不错 输入你的ip注意不要忘记 **:1** 对应自己配置文件里面的控制台号码 ![vnc](https://up.sowevo.com/history/59bb84dfe9196.png) 首次连接还会询问是否信任此设备,信任就行 输入用户信息 
 
-**用户是linux系统的用户,需要与配置文件中指定的一致,密码为用户对应的linux密码** ![VNC](https://i.loli.net/2017/09/15/59bb84dfdd9e7.png) OK,连接成功~ ![vnc](https://i.loli.net/2017/09/15/59bb84dfecd3d.png) 家里有公网ip的小伙伴,还可以为VNC服务设置端口转发,没有的请略过
+**用户是linux系统的用户,需要与配置文件中指定的一致,密码为用户对应的linux密码** ![VNC](https://up.sowevo.com/history/59bb84dfdd9e7.png) OK,连接成功~ ![vnc](https://up.sowevo.com/history/59bb84dfecd3d.png) 家里有公网ip的小伙伴,还可以为VNC服务设置端口转发,没有的请略过
 
 VNC的端口转发
 ========
 
-首先要知道VNC需要哪一个端口号 谷歌一下知道 VNC所需的端口不固定,一个控制台号需要对应三个端口 RFB(RemoteFrameBuffer)协议     默认端口 : 5900+控制台号 HTTP协议                                           默认端口 : 5800+控制台号 X协议                                                   默认端口 : 6000+控制台号 配置文件里指定的控制台号为 :1 所需的三个端口为5801,5901,6001三个,把这三个端口加入路由器的端口转发规则里 ![](https://i.loli.net/2017/09/15/59bb8be123693.png) 保存,输入你的公网ip测试一下,连接成功~!!
+首先要知道VNC需要哪一个端口号 谷歌一下知道 VNC所需的端口不固定,一个控制台号需要对应三个端口 RFB(RemoteFrameBuffer)协议     默认端口 : 5900+控制台号 HTTP协议                                           默认端口 : 5800+控制台号 X协议                                                   默认端口 : 6000+控制台号 配置文件里指定的控制台号为 :1 所需的三个端口为5801,5901,6001三个,把这三个端口加入路由器的端口转发规则里 ![](https://up.sowevo.com/history/59bb8be123693.png) 保存,输入你的公网ip测试一下,连接成功~!!
