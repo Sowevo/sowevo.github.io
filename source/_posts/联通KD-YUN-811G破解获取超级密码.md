@@ -15,7 +15,7 @@ categories:
 - TEWA-800E
 
   
-# 一步一步来~
+# 二逼破解
 - 进入光猫登录界面
   ![登录界面](https://up.sowevo.com/img/20190724214706.png)
 - F12进入开发者工具,在Elements中搜索user_name找到这里
@@ -52,7 +52,7 @@ categories:
 - 成功进入后台
   ![](https://up.sowevo.com/img/20190724220828.png)
 
-# 简单处理
+# 普通破解
 - 其实还有简单点的方法...
   打开登陆页,打开开发者工具,切换到Console标签页,输入以下命令
   ```Javascript
@@ -61,3 +61,7 @@ categories:
   document.getElementById('loginfrm').submit();
   ```
   回车即可,三行命令搞定
+  
+# 文艺破解
+- 直接访问[http://192.168.1.1/loginUser.htm?username=CUAdmin&password=CUAdmin](http://192.168.1.1/loginUser.htm?username=CUAdmin&password=CUAdmin)
+
