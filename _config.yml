@@ -837,9 +837,9 @@ theme_config:
   #growingio_analytics: #your projectId
   
   # Google Analytics
-  #google_analytics:
-  #  tracking_id:
-  #  localhost_ignored: true
+  google_analytics:
+    tracking_id:UA-161908021-1
+    localhost_ignored: true
   
   # CNZZ count
   cnzz_siteid: 1277757704
