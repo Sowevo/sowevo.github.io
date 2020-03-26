@@ -830,7 +830,7 @@ theme_config:
   # ---------------------------------------------------------------
   
   # Baidu Analytics ID
-  #baidu_analytics:
+  baidu_analytics: 7b0afa015cab66b8073ad46752443f38
   
   # Growingio Analytics ID
   # Copyright 2015-2018 GrowingIO, Inc. More info available at https://www.growingio.com
