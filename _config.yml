@@ -102,7 +102,7 @@ theme_config:
   
   # Redefine custom file paths. Introduced in NexT v6.0.2. If commented, will be used default custom file paths.
   # For example, you want to put your custom styles file outside theme directory in root `source/_data`, set `styles: source/_data/styles.styl`
-  #custom_file_path:
+  custom_file_path:
     # Default paths: layout/_custom/*
     #head: source/_data/head.swig
     #header: source/_data/header.swig
@@ -113,7 +113,7 @@ theme_config:
     # Default path: source/css/_mixins/custom.styl
     #mixins: source/_data/mixins.styl
     # Default path: source/css/_custom/custom.styl
-    #styles: source/_data/styles.styl
+    styles: source/_data/styles.styl
   
   
   # ---------------------------------------------------------------
