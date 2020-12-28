@@ -3,48 +3,51 @@ name: CI
 on:
   push:
     branches:
-      - hexo
+    - hexo
 
 env:
   GIT_USER: Sowevo
   GIT_EMAIL: i@sowevo.com
 
+
 jobs:
   build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [12.x]
+      strategy:
+        matrix:
+          os: [ubuntu-latest]
+          node_version: [12.x]
+    runs-on: ${{ matrix.os }}
+
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with: 
+    - name: Checkout
+      uses: actions/checkout@v2
+      with: 
           submodules: true
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node_version }}
+    - name: Use Node.js lts
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node_version }}
 
-      - name: Configuration environment
-        env:
-          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
-        run: |
-          sudo timedatectl set-timezone "Asia/Shanghai"
-          mkdir -p ~/.ssh/
-          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.name $GIT_USER
-          git config --global user.email $GIT_EMAIL
 
-      - name: Install dependencies
-        run: |
-          npm install
+    - name: prepare build env
+      env:
+        HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
 
-      - name: Deploy hexo
-        run: |
-          npm run deploy
+      run: |
+        sudo timedatectl set-timezone "Asia/Shanghai"
+        mkdir -p ~/.ssh/
+        echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        git config --global user.name $GIT_USER
+        git config --global user.email $GIT_EMAIL
+    - name: Install dependencies
+      run: |
+        npm i -g hexo-cli
+        npm i
+
+    - name: deploy to github 
+      run: |
+        hexo generate && hexo deploy
