@@ -57,8 +57,8 @@ jobs:
       run: |
         hexo generate && hexo deploy
       # 发布到服务器
-    - name: Deploy
-      uses: easingthemes/ssh-deploy
+    - name: ssh deploy
+      uses: easingthemes/ssh-deploy@v2.1.5
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         ARGS: "-avz --delete"
