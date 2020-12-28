@@ -3,9 +3,11 @@ name: CI
 on:
   push:
     branches:
+    # 只对特定分支生效
     - hexo
 
 env:
+  # 用于设置git提交的信息
   GIT_USER: Sowevo
   GIT_EMAIL: i@sowevo.com
 
@@ -13,29 +15,30 @@ env:
 jobs:
   build:
     strategy:
+      # 环境依赖
       matrix:
         os: [ubuntu-latest]
         node_version: [12.x]
     name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}    
     runs-on: ${{ matrix.os }}
 
-
+    # 步骤
     steps:
+      # 1.从git拉文件
     - name: Checkout
       uses: actions/checkout@v2
       with: 
           submodules: true
-
+      # 2.安装node的环境
     - name: Use Node.js lts
-      uses: actions/setup-node@v2-beta
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node_version }}
 
-
+      # 准备构建环境
     - name: prepare build env
       env:
         HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
-
       run: |
         sudo timedatectl set-timezone "Asia/Shanghai"
         mkdir -p ~/.ssh/
@@ -44,11 +47,22 @@ jobs:
         ssh-keyscan github.com >> ~/.ssh/known_hosts
         git config --global user.name $GIT_USER
         git config --global user.email $GIT_EMAIL
+      # 安装依赖
     - name: Install dependencies
       run: |
         npm i -g hexo-cli
         npm i
-
+      # 编译并发布
     - name: deploy to github 
       run: |
         hexo generate && hexo deploy
+      # 发布到服务器
+    - name: Deploy
+      uses: easingthemes/ssh-deploy
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-avz --delete"
+        SOURCE: "public/"
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        TARGET: /home/wwwroot/sowevo.github.io
