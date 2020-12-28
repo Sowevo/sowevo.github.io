@@ -53,11 +53,11 @@ jobs:
         npm i -g hexo-cli
         npm i
       # 编译并发布
-    - name: deploy to github 
+    - name: Deploy to github 
       run: |
         hexo generate && hexo deploy
       # 发布到服务器
-    - name: ssh deploy
+    - name: SSH Deploy
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
