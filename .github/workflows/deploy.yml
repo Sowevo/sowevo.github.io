@@ -12,10 +12,11 @@ env:
 
 jobs:
   build:
-      strategy:
-        matrix:
-          os: [ubuntu-latest]
-          node_version: [12.x]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [12.x]
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}    
     runs-on: ${{ matrix.os }}
 
 
