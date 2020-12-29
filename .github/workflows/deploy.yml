@@ -56,6 +56,8 @@ jobs:
       run: |
         hexo generate && hexo deploy
       # 发布到服务器
+      # 服务器上运行一个docker的nginx
+      # docker run --name sowevo.github.io -p 80:80 -v /home/wwwroot/sowevo.github.io:/usr/share/nginx/html:ro -d nginx
     - name: SSH Deploy
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
