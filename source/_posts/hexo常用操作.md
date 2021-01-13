@@ -1,7 +1,7 @@
 ---
 title: hexo常用操作
 date: 2020-03-26 01:05:41
-updated: 2020-03-26 01:05:41
+updated: 2021-01-13 20:24:35
 tags: Hexo
 ---
 
@@ -48,10 +48,10 @@ tags: Hexo
   # 安装依赖
   $ npm install
   # 安装hexo git 部署插件
-  $ npm hexo-deployer-git
+  $ npm install hexo-deployer-git
   # 其他插件
-  $	npm install hexo-generator-sitemap
-  $	npm install hexo-generator-baidu-sitemap
+  $ npm install hexo-generator-sitemap
+  $ npm install hexo-generator-baidu-sitemap
   $ npm install hexo-generator-feed
   ```
 
