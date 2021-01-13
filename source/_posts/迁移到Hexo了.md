@@ -1,6 +1,7 @@
 ---
 title: 迁移到Hexo了
 date: 2018-09-13 19:17:58
+updated: 2018-09-13 19:17:58
 tags:
 keywords: Hexo, Blog
 thumbnail: https://up.sowevo.com/history/5b9b3b06d269f.png

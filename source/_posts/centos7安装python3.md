@@ -1,6 +1,7 @@
 ---
 title: centos7安装python3
 date: 2018-09-16 10:48:01
+updated: 2018-09-16 10:48:01
 tags: linux
 ---
 
