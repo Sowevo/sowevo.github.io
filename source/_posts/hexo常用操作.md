@@ -46,7 +46,7 @@ tags: Hexo
 
   ```shell
   # 安装hexo
-  $ npm install hexo
+  $ npm install -g hexo-cli
   # 安装依赖
   $ npm install
   # 安装hexo git 部署插件
