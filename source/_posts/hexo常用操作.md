@@ -12,13 +12,15 @@ tags: Hexo
 
 # 本地恢复hexo的环境
 
-- 安装node
+- 安装nodejs
 
   ```shell
   # mac
   $ brew install node
   # centos
   $ yum install -y nodejs
+  # Ubuntu 
+  $ apt install nodejs npm -y
   ```
 
 - node的国内镜像源配置
