@@ -1,70 +1,166 @@
 ---
 title: GIT命令记录
 date: 2018-09-13 19:15:16
-updated: 2018-09-16 10:48:01
-tags: linux
+updated: 2021-2-5 15:57:53
+tags: 
+  - linux
+  - git
 ---
-随便记录一下git的相关命令...
 
-# 基本命令
+# Git合并
 
-```bash
-git add file_name                                     # 向暂存区添加文件
-git branch                                            # 查看目前git仓库中已有的分支
-git branch new_branch_name                            # 创建分支，无分支起点默认在当前提交上创建分支
-git branch -d branch_name                             # 删除分支
-git branch -D branch_name                             # 强制删除分支
-git checkout branch_name                              # 切换分支
-git checkout -b branch_name                           # 新建并切换到该分支
-git checkout --file_name                              # 丢弃工作区的修改
-git commit -m "commit_log"                            # 保存暂存区记录
-git commit -am "commit_log"                           # 保存目录中已被跟踪的文件的暂存区记录
-git clone remote_repo_url [file_path]                 # 克隆远程仓库到本地
-git diff                                              # 比较工作目录和暂存区的差异
-git diff HEAD^                                        # 比较工作目录与仓库中最近一次的提交间的差异
-git diff -cached                                      # 比较暂存区和仓库中最近一次的提交间的差异
-git fetch remote_repo_name                            # 从远程仓库抓取最新数据到本地但不与本地分支进行合并
-git init                                              # 初始化仓库
-git log                                               # 查看提交日志
-git log --pretty=short                                # 只显示提交信息的第一行
-git log file_name                                     # 只显示指定目录、文件的日志
-git log -p                                            # 显示文件的改动 
-git log --graph                                       # 用图形查看
-git log --pretty=oneline                              # 查看简要信息
-git merge branch_name                                 # 在 master 分支下进行，合并分支
-git merge --no-ff -m "merge_log" branch_name          # 禁用 Fast forward 模式，并生成一个 commit
-git pull origin branch_name                           # 从远程仓库抓取最新数据并自动与本地分支进行合并
-git pull --rebase origin branch_name                  # 第一次拉取的时候先将本地与远程同步
-git push origin branch_name                           # 将本地仓库推送到远程仓库中
-git push -u origin branch_name                        # 第一次推送时将本地与远程关联起来
-git push -f origin branch_name                        # 强制同步远程与本地仓库
-git push origin tag_name                              # 将标签推送到远程仓库
-git rm file_name                                      # 删除仓库文件
-git reset --hard HEAD^                                # 回退到上一个版本
-git reset --hard commit_id                            # 回退到指定的版本
-git reflog                                            # 查看提交命令
-git reset HEAD -- file_name                           # 撤销暂存区具体文件的修改
-git remote                                            # 查看本地已经添加的远程仓库
-git remote -v                                         # 可以一并查看远程仓库的地址
-git remote show remote_repo_name                      # 查看远程仓库信息
-git remote add origin remote_repo_url                 # 在本地添加远程仓库
-git remote rm remote_repo_name                        # 删除本地添加的远程仓库
-git remote rename old_name new_name                   # 重命名远程仓库
-git status                                            # 查看仓库状态
-git stash                                             # 隐藏工作现场
-git stash list                                        # 查看工作现场
-git stash apply                                       # 恢复工作现场
-git stash drop                                        # 删除 stash 内容
-git stash pop                                         # 恢复现场并删除 stash 内容
-git show commit -commit_id                            # 查看指定 id 的提交信息
-git show -all                                         # 显示提交历史
-```
-# 账号配置
-```bash
-git config --global user.name "your_name"             # 配置 Github 账号
-git config --global user.email "your_email"           # 配置 Github 邮箱
-ssh-keygen -t rsa -C "your_email"                     # 设置 ssh key
-cat ~/.ssh/id_rsa.pub                                 # 查看 ssh公钥
-ssh -T git@github.com                                 # 与 Github 进行验证
+```shell
+# 确保来源分支代码最新
+$ git checkout master
+$ git pull
+
+# 确保目标分支代码最新
+$ git checkout QC_1916
+$ git pull
+
+# 在目标分支上执行操作,禁止快进式合并
+$ git merge --no-f origin/master
+
+# 如果有冲突
+$ git merge --no-f origin/master
+Auto-merging index.html
+CONFLICT (content): Merge conflict in Devmngr/app/BP/system/BusCityInfoBP.java
+Automatic merge failed; fix conflicts and then commit the result.
+# 开始解决冲突
+# 查看冲突状态
+$ git status
+# 开始处理
+$ git mergetool
+
+This message is displayed because 'merge.tool' is not configured.
+See 'git mergetool --tool-help' or 'git help config' for more details.
+'git mergetool' will now attempt to use one of the following tools:
+opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare emerge vimdiff
+Merging:
+Devmngr/app/BP/system/BusCityInfoBP.java
+
+Normal merge conflict for 'Devmngr/app/BP/system/BusCityInfoBP.java':
+  {local}: modified file
+  {remote}: modified file
+Hit return to start merge resolution tool (tortoisemerge):
+
+# 输入回车用默认的合并工具
+# 在工具中解决冲突
+
+# 在次查看状态确认已解决
+$ git status
+
+# 完成合并提交
+$ git commit
+
+# 提交到远端
+$ git push
 ```
 
+# 使用Beyond Compare作为对比工具
+
+MAC的话要先安装命令行工具
+
+![MAC的话要先安装命令行工具](https://up.sowevo.com/img/20201203152302.png)
+
+```ini
+# Windows需要修改.gitconfig文件 加入如下配置
+[diff]
+	tool = bc4
+[difftool "bc4"]
+	cmd = \"D:/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\"
+[merge]
+	tool = bc4
+[mergetool "bc4"]
+	cmd = \"D:/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
+	
+# MAC user目录下的.gitconfig
+[diff]
+        tool = bcomp
+[difftool "bcomp"]
+        cmd = \"/usr/local/bin/bcomp\" \"$LOCAL\" \"$REMOTE\"
+[difftool]
+        prompt = false
+[merge]
+        tool = bcomp
+[mergetool]
+        prompt = false
+[mergetool "bcomp"]
+        cmd = \"/usr/local/bin/bcomp\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+```
+
+# 删除分支
+
+```shell
+# 查看本地分支
+$ git branch
+# 删除本地分支
+$ git branch -d <BranchName>
+
+# 查看远端分支
+$ git branch -a
+# 删除远端分支
+$ git push origin --delete <BranchName>
+```
+
+# 获取两个分支的差异文件
+
+```shell
+# 比较YD2007,online两个分支的差异文件的列表,记录到文件
+$ git diff YD2007 QC_online --stat --stat-name-width=1000 --stat-graph-width=-10 > 123.txt
+```
+
+# 设置用户名密码
+
+```shell
+# 设置用户名密码
+$ git config --global user.name sowevo
+$ git config --global user.email i@sowevo.com
+```
+
+# 快速拉取最新代码
+
+- 通过`git remote -v`查看是否有源头仓库的别名和地址。
+
+  例如这里origin就是你自己的仓库，upstream是你fork的源头仓库。
+
+  ```shell
+  $ git remote -v
+  origin  https://github.com/JunzhouLiu/cxmooc-tools.git (fetch)
+  origin  https://github.com/JunzhouLiu/cxmooc-tools.git (push)
+  upstream        https://github.com/CodFrm/cxmooc-tools.git (fetch)
+  upstream        https://github.com/CodFrm/cxmooc-tools.git (push)
+  ```
+
+- fork仓库后，将你的仓库拉到本地，如果没有源头仓库，则添加源头仓库
+
+  ```shell
+  $ git remote add upstream https://github.com/JunzhouLiu/BILIBILI-HELPER.git
+  ```
+
+- 更新上游仓库main分支的代码（pull操作实际上是 `fetch+merge`）
+
+  ```shell
+  $ git pull upstream main   # 分支名,视具体情况决定 可能是master或者其他
+  ```
+
+- 将从源头仓库更新后的代码推送到你自己的github仓库
+
+  ```shell
+  $ git push origin main # 分支名,视具体情况决定 可能是master或者其他
+  ```
+
+- 这样你就能快速的从主仓库拉取最新的代码，并更新到你自己的仓库里了。
+
+# Git下载某一个commit提交的文件
+
+```shell
+# 先比较出来需要的文件   
+# commit-id^ 表示commit的上一个版本
+# 并把文件名写入sparse-checkout
+$ git diff --name-only <commit-id>^ <commit-id> >.git/info/sparse-checkout
+# 打开稀疏检出
+$ git config core.sparseCheckout true
+$ git checkout
+```
