@@ -56,7 +56,7 @@ $ git commit
 # 提交到远端
 $ git push
 ```
-
+<!-- more -->
 # 使用Beyond Compare作为对比工具
 
 MAC的话要先安装命令行工具
