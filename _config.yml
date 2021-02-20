@@ -167,7 +167,7 @@ theme_config:
     # http://www.beian.miit.gov.cn
     beian:
       enable: true
-      icp: 豫ICP备19022723
+      icp: 豫ICP备19022723-1
   
     # Any custom text can be defined here.
     #custom_text: Hosted by <a href="https://pages.coding.me" class="theme-link" rel="noopener" target="_blank">Coding Pages</a>
