@@ -1,7 +1,7 @@
 ---
 title: hexo常用操作
 date: 2020-03-26 01:05:41
-updated: 2021-2-5 16:24:01
+updated: 2021-03-18 22:39:24
 tags: Hexo
 ---
 
@@ -34,6 +34,8 @@ tags: Hexo
   ```shell
   # 因为使用了子项目管理主题,加上'--recursive'参数 
   $ git clone --recursive git@github.com:Sowevo/sowevo.github.io.git
+  # 同时还要更新一下子项目的代码
+  $ git submodule update
   ```
 
 - 进入项目
