@@ -1,5 +1,5 @@
 ---
-title: openwrt开启外网访问并配置SSL
+title: Openwrt开启外网访问并配置SSL
 date: 2021-03-18 22:43:11
 updated: 2021-03-18 22:43:11
 tags: openwrt
@@ -50,4 +50,4 @@ tags: openwrt
 
 - 将路由器的443端口映射到外网
 ![](https://up.sowevo.com/img/20210318231508.png)
-家宽的443端口既然没有封,就先使着吧...
+家宽的443端口竟然没有封,就先使着吧...
