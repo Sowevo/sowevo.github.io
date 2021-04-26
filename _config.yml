@@ -831,16 +831,16 @@ theme_config:
   # ---------------------------------------------------------------
   
   # Baidu Analytics ID
-  # baidu_analytics: 7b0afa015cab66b8073ad46752443f38
+  baidu_analytics: 7b0afa015cab66b8073ad46752443f38
   
   # Growingio Analytics ID
   # Copyright 2015-2018 GrowingIO, Inc. More info available at https://www.growingio.com
   #growingio_analytics: #your projectId
   
   # Google Analytics
-  # google_analytics:
-  #   tracking_id: UA-161908021-1
-  #   localhost_ignored: true
+  google_analytics:
+    tracking_id: UA-161908021-1
+    localhost_ignored: true
   
   # CNZZ count
   #cnzz_siteid:
