@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sowevo.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Git合并123456789101112131415161718192021222324252627282930313233343536373839404142434445# 确保来源分支代码最新$ git checkout master$ git pull# 确保目标分支代码最新$ git checkout QC_1916$ git pull# 在目标分支上执行操作,禁止快进式合并$ git m">
+<meta name="keywords" content="linux,git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIT命令记录">
+<meta property="og:url" content="https://sowevo.com/GIT命令记录/index.html">
+<meta property="og:site_name" content="Sowevo&#39;s Blog">
+<meta property="og:description" content="Git合并123456789101112131415161718192021222324252627282930313233343536373839404142434445# 确保来源分支代码最新$ git checkout master$ git pull# 确保目标分支代码最新$ git checkout QC_1916$ git pull# 在目标分支上执行操作,禁止快进式合并$ git m">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://up.sowevo.com/img/20201203152302.png">
+<meta property="og:updated_time" content="2021-02-05T07:57:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GIT命令记录">
+<meta name="twitter:description" content="Git合并123456789101112131415161718192021222324252627282930313233343536373839404142434445# 确保来源分支代码最新$ git checkout master$ git pull# 确保目标分支代码最新$ git checkout QC_1916$ git pull# 在目标分支上执行操作,禁止快进式合并$ git m">
+<meta name="twitter:image" content="https://up.sowevo.com/img/20201203152302.png">
+
+<link rel="canonical" href="https://sowevo.com/GIT命令记录/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GIT命令记录 | Sowevo's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161908021-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-161908021-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7b0afa015cab66b8073ad46752443f38";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Sowevo's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sowevo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sowevo.com/GIT命令记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://up.sowevo.com/avatar.jpeg?imageMogr2/thumbnail/50x">
+      <meta itemprop="name" content="Sowevo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sowevo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GIT命令记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-09-13 19:15:16" itemprop="dateCreated datePublished" datetime="2018-09-13T19:15:16+08:00">2018-09-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-05 15:57:53" itemprop="dateModified" datetime="2021-02-05T15:57:53+08:00">2021-02-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Git合并"><a href="#Git合并" class="headerlink" title="Git合并"></a>Git合并</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 确保来源分支代码最新</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git checkout master</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git pull</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 确保目标分支代码最新</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git checkout QC_1916</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git pull</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在目标分支上执行操作,禁止快进式合并</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git merge --no<span class="_">-f</span> origin/master</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果有冲突</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git merge --no<span class="_">-f</span> origin/master</span></span><br><span class="line">Auto-merging index.html</span><br><span class="line">CONFLICT (content): Merge conflict in Devmngr/app/BP/system/BusCityInfoBP.java</span><br><span class="line">Automatic merge failed; fix conflicts and then commit the result.</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开始解决冲突</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看冲突状态</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git status</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 开始处理</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git mergetool</span></span><br><span class="line"></span><br><span class="line">This message is displayed because 'merge.tool' is not configured.</span><br><span class="line">See 'git mergetool --tool-help' or 'git help config' for more details.</span><br><span class="line">'git mergetool' will now attempt to use one of the following tools:</span><br><span class="line">opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare emerge vimdiff</span><br><span class="line">Merging:</span><br><span class="line">Devmngr/app/BP/system/BusCityInfoBP.java</span><br><span class="line"></span><br><span class="line">Normal merge conflict for 'Devmngr/app/BP/system/BusCityInfoBP.java':</span><br><span class="line">  &#123;local&#125;: modified file</span><br><span class="line">  &#123;remote&#125;: modified file</span><br><span class="line">Hit return to start merge resolution tool (tortoisemerge):</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 输入回车用默认的合并工具</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在工具中解决冲突</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在次查看状态确认已解决</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git status</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 完成合并提交</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提交到远端</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="使用Beyond-Compare作为对比工具"><a href="#使用Beyond-Compare作为对比工具" class="headerlink" title="使用Beyond Compare作为对比工具"></a>使用Beyond Compare作为对比工具</h1><p>MAC的话要先安装命令行工具</p>
+<p><img src="https://up.sowevo.com/img/20201203152302.png" alt="MAC的话要先安装命令行工具"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Windows需要修改.gitconfig文件 加入如下配置</span></span><br><span class="line"><span class="section">[diff]</span></span><br><span class="line">	tool = bc4</span><br><span class="line"><span class="section">[difftool "bc4"]</span></span><br><span class="line">	cmd = \"D:/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\"</span><br><span class="line"><span class="section">[merge]</span></span><br><span class="line">	tool = bc4</span><br><span class="line"><span class="section">[mergetool "bc4"]</span></span><br><span class="line">	cmd = \"D:/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"</span><br><span class="line">	trustExitCode = true</span><br><span class="line">	</span><br><span class="line"><span class="comment"># MAC user目录下的.gitconfig</span></span><br><span class="line"><span class="section">[diff]</span></span><br><span class="line">        tool = bcomp</span><br><span class="line"><span class="section">[difftool "bcomp"]</span></span><br><span class="line">        cmd = \"/usr/local/bin/bcomp\" \"$LOCAL\" \"$REMOTE\"</span><br><span class="line"><span class="section">[difftool]</span></span><br><span class="line">        prompt = false</span><br><span class="line"><span class="section">[merge]</span></span><br><span class="line">        tool = bcomp</span><br><span class="line"><span class="section">[mergetool]</span></span><br><span class="line">        prompt = false</span><br><span class="line"><span class="section">[mergetool "bcomp"]</span></span><br><span class="line">        cmd = \"/usr/local/bin/bcomp\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"</span><br></pre></td></tr></table></figure>
+<h1 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看本地分支</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git branch</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除本地分支</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git branch -d &lt;BranchName&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看远端分支</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git branch -a</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除远端分支</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push origin --delete &lt;BranchName&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="获取两个分支的差异文件"><a href="#获取两个分支的差异文件" class="headerlink" title="获取两个分支的差异文件"></a>获取两个分支的差异文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 比较YD2007,online两个分支的差异文件的列表,记录到文件</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git diff YD2007 QC_online --<span class="built_in">stat</span> --<span class="built_in">stat</span>-name-width=1000 --<span class="built_in">stat</span>-graph-width=-10 &gt; 123.txt</span></span><br></pre></td></tr></table></figure>
+<h1 id="设置用户名密码"><a href="#设置用户名密码" class="headerlink" title="设置用户名密码"></a>设置用户名密码</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设置用户名密码</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global user.name sowevo</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config --global user.email i@sowevo.com</span></span><br></pre></td></tr></table></figure>
+<h1 id="快速拉取最新代码"><a href="#快速拉取最新代码" class="headerlink" title="快速拉取最新代码"></a>快速拉取最新代码</h1><ul>
+<li><p>通过<code>git remote -v</code>查看是否有源头仓库的别名和地址。</p>
+<p>例如这里origin就是你自己的仓库，upstream是你fork的源头仓库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote -v</span></span><br><span class="line">origin  https://github.com/JunzhouLiu/cxmooc-tools.git (fetch)</span><br><span class="line">origin  https://github.com/JunzhouLiu/cxmooc-tools.git (push)</span><br><span class="line">upstream        https://github.com/CodFrm/cxmooc-tools.git (fetch)</span><br><span class="line">upstream        https://github.com/CodFrm/cxmooc-tools.git (push)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fork仓库后，将你的仓库拉到本地，如果没有源头仓库，则添加源头仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote add upstream https://github.com/JunzhouLiu/BILIBILI-HELPER.git</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新上游仓库main分支的代码（pull操作实际上是 <code>fetch+merge</code>）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git pull upstream main   <span class="comment"># 分支名,视具体情况决定 可能是master或者其他</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将从源头仓库更新后的代码推送到你自己的github仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git push origin main <span class="comment"># 分支名,视具体情况决定 可能是master或者其他</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这样你就能快速的从主仓库拉取最新的代码，并更新到你自己的仓库里了。</p>
+</li>
+</ul>
+<h1 id="Git下载某一个commit提交的文件"><a href="#Git下载某一个commit提交的文件" class="headerlink" title="Git下载某一个commit提交的文件"></a>Git下载某一个commit提交的文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 先比较出来需要的文件   </span></span><br><span class="line"><span class="meta">#</span><span class="bash"> commit-id^ 表示commit的上一个版本</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 并把文件名写入sparse-checkout</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git diff --name-only &lt;commit-id&gt;^ &lt;commit-id&gt; &gt;.git/info/sparse-checkout</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 打开稀疏检出</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git config core.sparseCheckout <span class="literal">true</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git checkout</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/群晖搭建h5ai/" rel="prev" title="群晖搭建h5ai">
+      <i class="fa fa-chevron-left"></i> 群晖搭建h5ai
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/迁移到Hexo了/" rel="next" title="迁移到Hexo了">
+      迁移到Hexo了 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git合并"><span class="nav-number">1.</span> <span class="nav-text">Git合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Beyond-Compare作为对比工具"><span class="nav-number">2.</span> <span class="nav-text">使用Beyond Compare作为对比工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除分支"><span class="nav-number">3.</span> <span class="nav-text">删除分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取两个分支的差异文件"><span class="nav-number">4.</span> <span class="nav-text">获取两个分支的差异文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置用户名密码"><span class="nav-number">5.</span> <span class="nav-text">设置用户名密码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#快速拉取最新代码"><span class="nav-number">6.</span> <span class="nav-text">快速拉取最新代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git下载某一个commit提交的文件"><span class="nav-number">7.</span> <span class="nav-text">Git下载某一个commit提交的文件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sowevo"
+      src="https://up.sowevo.com/avatar.jpeg?imageMogr2/thumbnail/50x">
+  <p class="site-author-name" itemprop="name">Sowevo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sowevo" title="GitHub → https://github.com/Sowevo" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">豫ICP备19022723-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sowevo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
