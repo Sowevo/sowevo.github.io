@@ -55,7 +55,7 @@ tags: Hexo
 - 更新升级项目依赖包
   ```shell
   # 进入项目
-  $ sudo npm i -g npm-check-updates
+  $ npm i -g npm-check-updates
   $ ncu -u
   $ npm install
   ```
