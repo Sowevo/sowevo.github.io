@@ -35,6 +35,12 @@ tags: Hexo
   # 因为使用了子项目管理主题,加上'--recursive'参数 
   $ git clone --recursive git@github.com:Sowevo/sowevo.github.io.git
   ```
+  
+- 进入项目
+
+  ```shell
+  $ cd ~/sowevo.github.io
+  ```
 - 更新主题子项目
   ```shell
   # 进入项目
@@ -46,13 +52,14 @@ tags: Hexo
   $ git commit -m "themes submodule updated"
   $ git push
   ```
-
-- 进入项目
-
+- 更新升级项目依赖包
   ```shell
-  $ cd ~/sowevo.github.io
+  # 进入项目
+  $ sudo npm i -g npm-check-updates
+  $ ncu -u
+  $ npm install
   ```
-
+  
 - 安装相关依赖
 
   ```shell
