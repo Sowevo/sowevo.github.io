@@ -69,4 +69,4 @@ jobs:
         SOURCE: "public/"
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        TARGET: /home/nginxWebUI/sowevo.github.io
+        TARGET: /docker-volumes/nginx-proxy-manager/data/nginx/web/sowevo.github.io
