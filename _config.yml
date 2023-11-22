@@ -3,8 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-# title: Sowevo的博客
-title: 一比一比一
+title: Sowevo的博客
 subtitle:
 description:
 keywords:
@@ -166,7 +165,7 @@ theme_config:
     # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, http://www.beian.gov.cn
     beian:
       enable: true
-      icp: 豫ICP备19022723号-1
+      icp: 备你妈的案
       # The digit in the num of gongan beian.
       gongan_id:
       # The full num of gongan beian.
@@ -260,9 +259,9 @@ theme_config:
     # In theme directory (source/images): /images/avatar.gif
     # In site directory (source/uploads): /uploads/avatar.gif
     # You can also use other linking images.
-    url: https://up.sowevo.com/avatar.jpeg?imageMogr2/thumbnail/50x
+    url: https://up.sowevo.com/avatar.jpeg
     # If true, the avatar would be dispalyed in circle.
-    rounded: false
+    rounded: true
     # If true, the avatar would be rotated with the cursor.
     rotated: true
 
@@ -766,15 +765,15 @@ theme_config:
   # ---------------------------------------------------------------
 
   # Google Analytics
-  google_analytics:
-    tracking_id: UA-161908021-1
-    localhost_ignored: true
-    # By default, NexT will load an external gtag.js script on your site.
-    # If you only need the pageview feature, set the following option to true to get a better performance.
-    only_pageview: false
+  # google_analytics:
+  #   tracking_id: UA-161908021-1
+  #   localhost_ignored: true
+  #   # By default, NexT will load an external gtag.js script on your site.
+  #   # If you only need the pageview feature, set the following option to true to get a better performance.
+  #   only_pageview: false
 
   # Baidu Analytics ID
-  baidu_analytics: 7b0afa015cab66b8073ad46752443f38
+  # baidu_analytics: 7b0afa015cab66b8073ad46752443f38
 
   # Growingio Analytics
   growingio_analytics: # <project_id>
