@@ -34,6 +34,7 @@ tags: Hexo
   ```shell
   # 因为使用了子项目管理主题,加上'--recursive'参数 
   $ git clone --recursive git@github.com:Sowevo/sowevo.github.io.git
+  $ git clone --recursive https://github.com/Sowevo/sowevo.github.io.git
   ```
   
 - 进入项目
