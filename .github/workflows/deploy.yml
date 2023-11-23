@@ -18,7 +18,7 @@ jobs:
       # 环境依赖
       matrix:
         os: [ubuntu-latest]
-        node_version: [12.x]
+        node_version: [18.x]
     name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}    
     runs-on: ${{ matrix.os }}
 
