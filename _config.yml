@@ -165,7 +165,7 @@ theme_config:
     # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, http://www.beian.gov.cn
     beian:
       enable: true
-      icp: 备你妈的案
+      icp: 不用备案了
       # The digit in the num of gongan beian.
       gongan_id:
       # The full num of gongan beian.
