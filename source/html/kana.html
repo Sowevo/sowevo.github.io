@@ -150,6 +150,13 @@
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'ja-JP';
                     utterance.rate = 0.8; // 调整语速
+                    // 获取可用的语音
+                    const voices = speechSynthesis.getVoices();
+                    // 查找日文语音
+                    const japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+                    if (japaneseVoice) {
+                        utterance.voice = japaneseVoice;
+                    }
                     window.speechSynthesis.speak(utterance);
                 } else {
                     console.error('Speech synthesis not supported');
