@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sowevo.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="要开启VNC首先要在树莓派上面安装VNC服务,最新版的Raspbian系统已经自带了VNC服务,只需要开启一下就行 开启服务ssh登陆之后,输入 1sudo raspi-config 进入raspi-config设置工具 选择Interfacing Options –&gt;VNC 启动vnc服务,开启远程桌面服务   最后选择Finish退出,并重启系统.. 配置服务,开机启动首先 sudo v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派开启VNC,并配置端口转发">
+<meta property="og:url" content="https://sowevo.com/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%BC%80%E5%90%AFVNC,%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/index.html">
+<meta property="og:site_name" content="Sowevo的博客">
+<meta property="og:description" content="要开启VNC首先要在树莓派上面安装VNC服务,最新版的Raspbian系统已经自带了VNC服务,只需要开启一下就行 开启服务ssh登陆之后,输入 1sudo raspi-config 进入raspi-config设置工具 选择Interfacing Options –&gt;VNC 启动vnc服务,开启远程桌面服务   最后选择Finish退出,并重启系统.. 配置服务,开机启动首先 sudo v">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://up.sowevo.com/history/59ba27934b756.png">
+<meta property="og:image" content="https://up.sowevo.com/history/59ba2db359497.png">
+<meta property="og:image" content="https://up.sowevo.com/history/59bb84dfe9196.png">
+<meta property="og:image" content="https://up.sowevo.com/history/59bb84dfdd9e7.png">
+<meta property="og:image" content="https://up.sowevo.com/history/59bb84dfecd3d.png">
+<meta property="og:image" content="https://up.sowevo.com/history/59bb8be123693.png">
+<meta property="article:published_time" content="2017-09-15T08:15:18.000Z">
+<meta property="article:modified_time" content="2017-09-15T08:15:18.000Z">
+<meta property="article:author" content="Sowevo">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="树莓派">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://up.sowevo.com/history/59ba27934b756.png">
+
+<link rel="canonical" href="https://sowevo.com/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%BC%80%E5%90%AFVNC,%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>树莓派开启VNC,并配置端口转发 | Sowevo的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Sowevo的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sowevo的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sowevo.com/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%BC%80%E5%90%AFVNC,%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://up.sowevo.com/avatar.jpeg">
+      <meta itemprop="name" content="Sowevo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sowevo的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          树莓派开启VNC,并配置端口转发<a href="https://github.com/Sowevo/sowevo.github.io/tree/hexo/source/_posts/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%BC%80%E5%90%AFVNC,%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-15 16:15:18" itemprop="dateCreated datePublished" datetime="2017-09-15T16:15:18+08:00">2017-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%98%E8%85%BE/" itemprop="url" rel="index"><span itemprop="name">折腾</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>要开启VNC首先要在树莓派上面安装VNC服务,最新版的Raspbian系统已经自带了VNC服务,只需要开启一下就行</p>
+<h1 id="开启服务"><a href="#开启服务" class="headerlink" title="开启服务"></a>开启服务</h1><p>ssh登陆之后,输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure>
+<p>进入raspi-config设置工具 选择Interfacing Options –&gt;VNC 启动vnc服务,开启远程桌面服务 <img data-src="https://up.sowevo.com/history/59ba27934b756.png"> <img data-src="https://up.sowevo.com/history/59ba2db359497.png"> 最后选择Finish退出,并重启系统..</p>
+<h1 id="配置服务-开机启动"><a href="#配置服务-开机启动" class="headerlink" title="配置服务,开机启动"></a>配置服务,开机启动</h1><p>首先 sudo vim &#x2F;etc&#x2F;init.d&#x2F;vncserver 编辑文件,输入下面内容并保存,具体参数可以根据自己情况稍作修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">## BEGIN INIT INFO</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Provides:          vncserver</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Required-Start:    <span class="variable">$local_fs</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Required-Stop:     <span class="variable">$local_fs</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Default-Start:     2 3 4 5</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Default-Stop:      0 1 6</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Short-Description: Start/stop vncserver</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">## END INIT INFO</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">More details see:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">http://www.penguintutor.com/linux/vnc</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">## Customize this entry</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Set the USER variable to the name of the user to start vncserver under</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里可以修改连接的用户,如果用其他用户,相应的修改</span></span><br><span class="line">export USER=&#x27;pi&#x27;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">## End customization required</span></span></span><br><span class="line"></span><br><span class="line">eval cd ~$USER</span><br><span class="line"></span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">  start)</span><br><span class="line">    # 启动命令行。此处自定义分辨率、控制台号码或其它参数。</span><br><span class="line">    su $USER -c &#x27;/usr/bin/vncserver -depth 16 -geometry 1920x1080 :1&#x27;</span><br><span class="line">    echo &quot;Starting VNC server for $USER &quot;</span><br><span class="line">    ;;</span><br><span class="line">  stop)</span><br><span class="line">    # 终止命令行。此处控制台号码与启动一致。</span><br><span class="line">    su $USER -c &#x27;/usr/bin/vncserver -kill :1&#x27;</span><br><span class="line">    echo &quot;vncserver stopped&quot;</span><br><span class="line">    ;;</span><br><span class="line">  *)</span><br><span class="line">    echo &quot;Usage: /etc/init.d/vncserver &#123;start|stop&#125;&quot;</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>并保存 赋予权限,并添加开机启动项</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 755 /etc/init.d/vncserver</span><br><span class="line">sudo update-rc.d vncserver defaults</span><br></pre></td></tr></table></figure>
+<p>最后重启树莓派~ 正常情况下重新启动之后就可以连接VNC了 打开你的VNC客户端,这里使用的Chrom拓展程序<a href="https://chrome.google.com/webstore/detail/vnc%C2%AE-viewer-for-google-ch/iabmpiboiopbgfabjmgeedhcmjenhbla?utm_source=chrome-app-launcher-info-dialog">VNC® Viewer for Google Chrome™</a>,不用额外安装,不错 输入你的ip注意不要忘记 <strong>:1</strong> 对应自己配置文件里面的控制台号码 <img data-src="https://up.sowevo.com/history/59bb84dfe9196.png" alt="vnc"> 首次连接还会询问是否信任此设备,信任就行 输入用户信息 </p>
+<p><strong>用户是linux系统的用户,需要与配置文件中指定的一致,密码为用户对应的linux密码</strong> <img data-src="https://up.sowevo.com/history/59bb84dfdd9e7.png" alt="VNC"> OK,连接成功~ <img data-src="https://up.sowevo.com/history/59bb84dfecd3d.png" alt="vnc"> 家里有公网ip的小伙伴,还可以为VNC服务设置端口转发,没有的请略过</p>
+<h1 id="VNC的端口转发"><a href="#VNC的端口转发" class="headerlink" title="VNC的端口转发"></a>VNC的端口转发</h1><p>首先要知道VNC需要哪一个端口号 谷歌一下知道 VNC所需的端口不固定,一个控制台号需要对应三个端口 RFB(RemoteFrameBuffer)协议     默认端口 : 5900+控制台号 HTTP协议                                           默认端口 : 5800+控制台号 X协议                                                   默认端口 : 6000+控制台号 配置文件里指定的控制台号为 :1 所需的三个端口为5801,5901,6001三个,把这三个端口加入路由器的端口转发规则里 <img data-src="https://up.sowevo.com/history/59bb8be123693.png"> 保存,输入你的公网ip测试一下,连接成功~!!</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag"># 树莓派</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84%E9%A6%96%E6%AC%A1%E4%BD%BF%E7%94%A8/" rel="prev" title="树莓派的首次使用">
+      <i class="fa fa-chevron-left"></i> 树莓派的首次使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E4%B9%B0%E4%BA%86%E4%B8%AA%E5%8D%95%E5%8F%8D,%E8%90%8C%E8%90%8C%E5%93%92~/" rel="next" title="买了个单反,萌萌哒~">
+      买了个单反,萌萌哒~ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">开启服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1-%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8"><span class="nav-number">2.</span> <span class="nav-text">配置服务,开机启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VNC%E7%9A%84%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">VNC的端口转发</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sowevo"
+      src="https://up.sowevo.com/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Sowevo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sowevo" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Sowevo" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">不用备案了 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sowevo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

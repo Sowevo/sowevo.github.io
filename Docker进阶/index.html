@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sowevo.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Docker Compose简介Docker DockerFile build run 手动操作,单个容器! 微服务,服务多,相互依赖 使用Docker Compose来高效管理,定义多个容器  官方介绍 定义运行多个容器 使用yaml配置文件 所有环境都可以使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker进阶">
+<meta property="og:url" content="https://sowevo.com/Docker%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Sowevo的博客">
+<meta property="og:description" content="Docker Compose简介Docker DockerFile build run 手动操作,单个容器! 微服务,服务多,相互依赖 使用Docker Compose来高效管理,定义多个容器  官方介绍 定义运行多个容器 使用yaml配置文件 所有环境都可以使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://up.sowevo.com/img/20201224162029.png">
+<meta property="og:image" content="https://up.sowevo.com/img/20201226145356.png">
+<meta property="og:image" content="https://up.sowevo.com/img/20201226205204.png">
+<meta property="article:published_time" content="2021-02-05T09:08:40.000Z">
+<meta property="article:modified_time" content="2021-02-05T09:08:40.000Z">
+<meta property="article:author" content="Sowevo">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://up.sowevo.com/img/20201224162029.png">
+
+<link rel="canonical" href="https://sowevo.com/Docker%E8%BF%9B%E9%98%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Docker进阶 | Sowevo的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Sowevo的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sowevo的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sowevo.com/Docker%E8%BF%9B%E9%98%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://up.sowevo.com/avatar.jpeg">
+      <meta itemprop="name" content="Sowevo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sowevo的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker进阶<a href="https://github.com/Sowevo/sowevo.github.io/tree/hexo/source/_posts/Docker%E8%BF%9B%E9%98%B6.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-05 17:08:40" itemprop="dateCreated datePublished" datetime="2021-02-05T17:08:40+08:00">2021-02-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img data-src="https://up.sowevo.com/img/20201224162029.png" alt="img"></p>
+<h1 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Docker</p>
+<p>DockerFile build run 手动操作,单个容器!</p>
+<p>微服务,服务多,相互依赖</p>
+<p>使用Docker Compose来高效管理,定义多个容器</p>
+<ul>
+<li><p>官方介绍</p>
+<p>定义运行多个容器</p>
+<p>使用yaml配置文件</p>
+<p>所有环境都可以使用</p>
+</li>
+</ul>
+<span id="more"></span>
+<p>&#x3D;&#x3D;就是批量容器编排&#x3D;&#x3D;</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">要去git上确认下最新的版本</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/1.27.4/docker-compose-<span class="subst">$(uname -s)</span>-<span class="subst">$(uname -m)</span>&quot;</span> -o /usr/local/bin/docker-compose</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加上权限</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> <span class="built_in">chmod</span> +x /usr/local/bin/docker-compose</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="初体验"><a href="#初体验" class="headerlink" title="初体验!"></a>初体验!</h2><p>官方的例子</p>
+<ol>
+<li><p>创建文件夹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> composetest</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> composetest</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新建一个<code>app.py</code>文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">cache = redis.Redis(host=<span class="string">&#x27;redis&#x27;</span>, port=<span class="number">6379</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_hit_count</span>():</span><br><span class="line">    retries = <span class="number">5</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> cache.incr(<span class="string">&#x27;hits&#x27;</span>)</span><br><span class="line">        <span class="keyword">except</span> redis.exceptions.ConnectionError <span class="keyword">as</span> exc:</span><br><span class="line">            <span class="keyword">if</span> retries == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">raise</span> exc</span><br><span class="line">            retries -= <span class="number">1</span></span><br><span class="line">            time.sleep(<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    count = get_hit_count()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World! I have been seen &#123;&#125; times.\n&#x27;</span>.<span class="built_in">format</span>(count)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新建一个<code>requirements.txt</code>文件</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">flask</span></span><br><span class="line"><span class="attribute">redis</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建<code>Dockerfile</code>文件</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.7</span>-alpine       <span class="comment"># 从Python3.7映像开始构建</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /code                <span class="comment"># 将工作目录设置为/code</span></span></span><br><span class="line"><span class="keyword">ENV</span> FLASK_APP=app.py         <span class="comment"># 设置flask使用的环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> FLASK_RUN_HOST=<span class="number">0.0</span>.<span class="number">0.0</span>   </span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apk add --no-cache gcc musl-dev linux-headers <span class="comment"># 安装gcc和其他依赖项</span></span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> requirements.txt requirements.txt</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install -r requirements.txt               <span class="comment"># 使用requirements安装依赖</span></span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">5000</span>                                       <span class="comment"># 监听5000端口</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . .</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;flask&quot;</span>, <span class="string">&quot;run&quot;</span>]                              <span class="comment"># 执行flask命令</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建<code>docker-compose.yml</code>文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.9&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&quot;redis:alpine&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用compose构建并运行你的app</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果compose文件名不是标准的docker-compose.yml,可以使用-f指定文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker-compose -f docker-compose-dev.yml up</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker-compose up</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用compose停止你的app</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker-compose down</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="都干了些什么"><a href="#都干了些什么" class="headerlink" title="都干了些什么"></a>都干了些什么</h2><ol>
+<li>根据Dockerfile构建镜像,下载镜像</li>
+<li>容器名称的的处理</li>
+<li>新建一个网络给这个<code>项目</code>使用</li>
+</ol>
+<h2 id="配置文件的编写"><a href="#配置文件的编写" class="headerlink" title="配置文件的编写"></a>配置文件的编写</h2><p><strong><a href="https://docs.docker.com/compose/compose-file/compose-file-v3/#compose-file-structure-and-examples">官方文档链接</a></strong></p>
+<p>瞅瞅开源项目的<code>docker-compose.yml</code>文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.9&quot;</span>           <span class="comment"># 1.compose版本</span></span><br><span class="line"><span class="comment">#======================================    </span></span><br><span class="line"><span class="attr">services:</span>                <span class="comment"># 2.服务</span></span><br><span class="line">  <span class="attr">web:</span>                   <span class="comment">#   服务名</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span>             <span class="comment">#   服务构建目录,会在这个目录下找Dockerfile开始构建</span></span><br><span class="line">    <span class="attr">ports:</span>               <span class="comment">#   端口映射</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span> </span><br><span class="line">    <span class="attr">depends_on:</span>          <span class="comment">#   多个服务依赖的情况,被依赖的会先启动</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span>            <span class="comment">#   web依赖redis</span></span><br><span class="line">    <span class="attr">environment:</span>         <span class="comment">#   一些环境变量</span></span><br><span class="line">      <span class="attr">RACK_ENV:</span> <span class="string">development</span></span><br><span class="line">      <span class="attr">SHOW:</span> <span class="string">&#x27;true&#x27;</span>  </span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&quot;redis:alpine&quot;</span> <span class="comment"># 指定一个镜像</span></span><br><span class="line">    <span class="attr">expose:</span>              <span class="comment"># 暴露一些端口</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3000&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8000&quot;</span></span><br><span class="line"><span class="comment">#======================================</span></span><br><span class="line"><span class="attr">networks:</span>               <span class="comment"># 3.其他配置</span></span><br><span class="line">  <span class="attr">frontend:</span></span><br><span class="line">  <span class="attr">backend:</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db-data:</span>    </span><br></pre></td></tr></table></figure>
+
+<h2 id="再体验-WordPress"><a href="#再体验-WordPress" class="headerlink" title="再体验-WordPress"></a>再体验-WordPress</h2><p>部署WordPress</p>
+<ol>
+<li><p>建个文件夹</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> my_wordpress/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写<code>docker-compose.yml</code>文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">   <span class="attr">db:</span></span><br><span class="line">     <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">     <span class="attr">volumes:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="string">db_data:/var/lib/mysql</span></span><br><span class="line">     <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">     <span class="attr">environment:</span></span><br><span class="line">       <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">somewordpress</span></span><br><span class="line">       <span class="attr">MYSQL_DATABASE:</span> <span class="string">wordpress</span></span><br><span class="line">       <span class="attr">MYSQL_USER:</span> <span class="string">wordpress</span></span><br><span class="line">       <span class="attr">MYSQL_PASSWORD:</span> <span class="string">wordpress</span></span><br><span class="line"></span><br><span class="line">   <span class="attr">wordpress:</span></span><br><span class="line">     <span class="attr">depends_on:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">     <span class="attr">image:</span> <span class="string">wordpress:latest</span></span><br><span class="line">     <span class="attr">ports:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="string">&quot;8000:80&quot;</span></span><br><span class="line">     <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">     <span class="attr">environment:</span></span><br><span class="line">       <span class="attr">WORDPRESS_DB_HOST:</span> <span class="string">db:3306</span></span><br><span class="line">       <span class="attr">WORDPRESS_DB_USER:</span> <span class="string">wordpress</span></span><br><span class="line">       <span class="attr">WORDPRESS_DB_PASSWORD:</span> <span class="string">wordpress</span></span><br><span class="line">       <span class="attr">WORDPRESS_DB_NAME:</span> <span class="string">wordpress</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">    <span class="attr">db_data:</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动项目</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后台那运行</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker-compose up -d</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="再再体验-SpringBoot"><a href="#再再体验-SpringBoot" class="headerlink" title="再再体验-SpringBoot"></a>再再体验-SpringBoot</h2><ol>
+<li><p>SpringBoot写个项目</p>
+</li>
+<li><p>编写Dockerfile</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> java:<span class="number">8</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./target/*.jar /app.jar</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;--server.port=8080&quot;</span>]</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;java&quot;</span>,<span class="string">&quot;-jar&quot;</span>,<span class="string">&quot;/app.jar&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写<code>docker-compose.yml</code>文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.9&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">spring-boot:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;8080:8080&quot;</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后台运行</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker-compose up -d</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="Docker-Swarm"><a href="#Docker-Swarm" class="headerlink" title="Docker Swarm"></a>Docker Swarm</h1><h2 id="搞几台服务器"><a href="#搞几台服务器" class="headerlink" title="搞几台服务器"></a>搞几台服务器</h2><p>搞4台(1核2G)</p>
+<p>并安装Docker</p>
+<h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p><img data-src="https://up.sowevo.com/img/20201226145356.png" alt="Swarm mode cluster"></p>
+<h3 id="Swarm-两种角色"><a href="#Swarm-两种角色" class="headerlink" title="Swarm 两种角色"></a>Swarm 两种角色</h3><p><strong>Manager</strong>：接收客户端服务定义，将任务发送到worker节点；维护集群期望状态和集群管理功能及Leader选举。默认情况下manager节点也会运行任务，也可以配置只做管理任务。</p>
+<p><strong>Worker</strong>：接收并执行从管理节点分配的任务，并报告任务当前状态，以便管理节点维护每个服务期望状态。</p>
+<hr>
+<h2 id="搭建集群"><a href="#搭建集群" class="headerlink" title="搭建集群"></a>搭建集群</h2><p>使用Docker Swarm命令</p>
+<ol>
+<li><p>初始化一个manager节点</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">初始化一个管理节点</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker swarm init --advertise-addr=172.17.88.237</span></span><br><span class="line">Swarm initialized: current node (84jg51t5nr7ywlqku2uwpkcm3) is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">    docker swarm join --token SWMTKN-1-55o9kohbport6z73roe1m0532kl55ihc712tt6nrd1mupt0n3q-axx5fxz310o6t237m7dbxvt52 172.17.88.237:2377</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run &#x27;docker swarm join-token manager&#x27; and follow the instructions.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>manager节点生成token</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成加入工作节点(worker)的token,会直接输出可用的命令,人性化</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker swarm join-token worker</span> </span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">    docker swarm join --token SWMTKN-1-55o9kohbport6z73roe1m0532kl55ihc712tt6nrd1mupt0n3q-axx5fxz310o6t237m7dbxvt52 172.17.88.237:2377</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">===#</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成加入管理节点(manager)的token,会直接输出可用的命令,人性化</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker swarm join-token manager</span> </span><br><span class="line">To add a manager to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">    docker swarm join --token SWMTKN-1-55o9kohbport6z73roe1m0532kl55ihc712tt6nrd1mupt0n3q-brfqx08svxov16vbdi4jolpmc 172.17.88.237:2377</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他节点加入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">根据token的不同注册过去会有不同的权限~</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker swarm <span class="built_in">join</span> --token SWMTKN-1-55o9kohbport6z73roe1m0532kl55ihc712tt6nrd1mupt0n3q-axx5fxz310o6t237m7dbxvt52 172.17.88.237:2377 --advertise-addr=192.168.32.32</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>命令的相关用法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker swarm COMMAND</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   ca</span>              </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   init                       初始化swarm集群</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">         --advertise-addr     &lt;ip|interface&gt;[:port]</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">                              广播地址,本机的IP地址</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   <span class="built_in">join</span>                       加入swarm集群</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   join-token                 (worker|manager)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">                              生成一个加入的令牌,指定令牌的类型,其他机器加入集群时需要</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   leave                      离开swarm集群</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   unlock</span>      </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   unlock-key</span>  </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">   update</span>      </span><br></pre></td></tr></table></figure>
+
+<h2 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h2><p>Raft协议:保证大多数管理节点(manager)存活,集群才能可用</p>
+<p>当只有两台管理节点(manager)时,如果挂掉一个,会导致集群不可用</p>
+<p>所以一个高可用的Swarm集群至少要有3台管理节点(manager),一台工作节点(Worker)</p>
+<h2 id="Swarm集群中运行项目"><a href="#Swarm集群中运行项目" class="headerlink" title="Swarm集群中运行项目"></a>Swarm集群中运行项目</h2><h3 id="docker-service"><a href="#docker-service" class="headerlink" title="docker service"></a>docker service</h3><ul>
+<li><p>与docker的区别</p>
+<ul>
+<li><p>docker run :容器启动,不具有扩容容器的功能</p>
+</li>
+<li><p>docker service :服务启动,具有扩容功能,滚动更新</p>
+</li>
+</ul>
+</li>
+<li><p><strong>docker service create</strong>部署服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">--name 服务名 -p 端口映射</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">部署后四个服务的8080端口都可以访问到这个服务...厉害了我的哥</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service create -p 8080:80 --name my-nginx nginx</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>docker service ps</strong>查看服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看某个服务运行状态</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker service ps 服务名</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service ps my-nginx</span> </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已经在运行的服务</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service <span class="built_in">ls</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>docker service scale</strong>服务扩缩容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将my-nginx服务扩容到3个节点</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service update --replicas 3 my-nginx</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">两个命令等价</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service scale my-nginx=1</span></span><br></pre></td></tr></table></figure>
+
+<p>服务集群中的任意节点都可以访问,有多个副本可以动态伸缩,实现服务的高可用</p>
+</li>
+<li><p><strong>docker service rm</strong>服务删除</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">讲一个服务删除</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker service <span class="built_in">rm</span> my-nginx</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><strong>swarm</strong>:集群的管理和编排.Docker开一初始化一个swarm集群,其他节点可以以<strong>Manager</strong>或者<strong>Worker</strong>身份加入进来</li>
+<li><strong>Node</strong>:就是一个Docker节点,多个节点组成一个集群</li>
+<li><strong>Services</strong>:任务,可以在管理节点或者工作节点来运行,是核心,用户访问的.</li>
+<li><strong>task</strong>:容器内的命令</li>
+</ul>
+<p><img data-src="https://up.sowevo.com/img/20201226205204.png" alt="image-20201226205204563"></p>
+<p>命令&#x3D;&gt;管理&#x3D;&gt;API&#x3D;&gt;调度&#x3D;&gt;工作节点(创建Task容器,维护运行)</p>
+<h1 id="DockerStack"><a href="#DockerStack" class="headerlink" title="DockerStack"></a>DockerStack</h1><p>Dockercompose的集群版</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">单机</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker-compose up -d workpress.yaml</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">集群</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker stack deploy workpress.yaml</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Docker-Secret"><a href="#Docker-Secret" class="headerlink" title="Docker Secret"></a>Docker Secret</h1><p>安全,配置密码加密证书</p>
+<h1 id="Docker-Config"><a href="#Docker-Config" class="headerlink" title="Docker Config"></a>Docker Config</h1><p>配置</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Docker%E5%85%A5%E9%97%A8/" rel="prev" title="Docker入门">
+      <i class="fa fa-chevron-left"></i> Docker入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/openwrt%E5%BC%80%E5%90%AF%E5%A4%96%E7%BD%91%E8%AE%BF%E9%97%AE%E5%B9%B6%E9%85%8D%E7%BD%AESSL/" rel="next" title="Openwrt开启外网访问并配置SSL">
+      Openwrt开启外网访问并配置SSL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Compose"><span class="nav-number">1.</span> <span class="nav-text">Docker Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E4%BD%93%E9%AA%8C"><span class="nav-number">1.3.</span> <span class="nav-text">初体验!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%BD%E5%B9%B2%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88"><span class="nav-number">1.4.</span> <span class="nav-text">都干了些什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E7%BC%96%E5%86%99"><span class="nav-number">1.5.</span> <span class="nav-text">配置文件的编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E4%BD%93%E9%AA%8C-WordPress"><span class="nav-number">1.6.</span> <span class="nav-text">再体验-WordPress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%8D%E5%86%8D%E4%BD%93%E9%AA%8C-SpringBoot"><span class="nav-number">1.7.</span> <span class="nav-text">再再体验-SpringBoot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Swarm"><span class="nav-number">2.</span> <span class="nav-text">Docker Swarm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9E%E5%87%A0%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">搞几台服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">工作模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Swarm-%E4%B8%A4%E7%A7%8D%E8%A7%92%E8%89%B2"><span class="nav-number">2.2.1.</span> <span class="nav-text">Swarm 两种角色</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="nav-number">2.3.</span> <span class="nav-text">搭建集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.4.</span> <span class="nav-text">Raft协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swarm%E9%9B%86%E7%BE%A4%E4%B8%AD%E8%BF%90%E8%A1%8C%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.5.</span> <span class="nav-text">Swarm集群中运行项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-service"><span class="nav-number">2.5.1.</span> <span class="nav-text">docker service</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DockerStack"><span class="nav-number">3.</span> <span class="nav-text">DockerStack</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Secret"><span class="nav-number">4.</span> <span class="nav-text">Docker Secret</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Config"><span class="nav-number">5.</span> <span class="nav-text">Docker Config</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sowevo"
+      src="https://up.sowevo.com/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Sowevo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sowevo" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Sowevo" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">不用备案了 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sowevo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

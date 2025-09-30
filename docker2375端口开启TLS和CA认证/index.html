@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sowevo.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="进入工作目录 12# 证书文件将生成到此文件夹中$ cd &#x2F;etc&#x2F;docker&#x2F;cert  运行生成脚本 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364# !&#x2F;bin&#x2F;bash# 一键生成TLS和CA证书">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker2375端口开启TLS和CA认证">
+<meta property="og:url" content="https://sowevo.com/docker2375%E7%AB%AF%E5%8F%A3%E5%BC%80%E5%90%AFTLS%E5%92%8CCA%E8%AE%A4%E8%AF%81/index.html">
+<meta property="og:site_name" content="Sowevo的博客">
+<meta property="og:description" content="进入工作目录 12# 证书文件将生成到此文件夹中$ cd &#x2F;etc&#x2F;docker&#x2F;cert  运行生成脚本 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364# !&#x2F;bin&#x2F;bash# 一键生成TLS和CA证书">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-28T04:44:43.000Z">
+<meta property="article:modified_time" content="2022-12-28T04:44:43.000Z">
+<meta property="article:author" content="Sowevo">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sowevo.com/docker2375%E7%AB%AF%E5%8F%A3%E5%BC%80%E5%90%AFTLS%E5%92%8CCA%E8%AE%A4%E8%AF%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>docker2375端口开启TLS和CA认证 | Sowevo的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Sowevo的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Sowevo的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sowevo.com/docker2375%E7%AB%AF%E5%8F%A3%E5%BC%80%E5%90%AFTLS%E5%92%8CCA%E8%AE%A4%E8%AF%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://up.sowevo.com/avatar.jpeg">
+      <meta itemprop="name" content="Sowevo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sowevo的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker2375端口开启TLS和CA认证<a href="https://github.com/Sowevo/sowevo.github.io/tree/hexo/source/_posts/docker2375%E7%AB%AF%E5%8F%A3%E5%BC%80%E5%90%AFTLS%E5%92%8CCA%E8%AE%A4%E8%AF%81.md" class="post-edit-link" title="编辑" rel="noopener" target="_blank"><i class="fa fa-pencil-alt"></i></a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-28 12:44:43" itemprop="dateCreated datePublished" datetime="2022-12-28T12:44:43+08:00">2022-12-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li><p>进入工作目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">证书文件将生成到此文件夹中</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> /etc/docker/cert</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行生成脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">一键生成TLS和CA证书</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">This script should be run via curl:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://ghproxy.com/https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or via wget:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(wget -qO- https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(wget -qO- https://ghproxy.com/https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or via fetch:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(fetch -o - https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">  sh -c <span class="string">&quot;<span class="subst">$(fetch -o - https://ghproxy.com/https://raw.githubusercontent.com/Sowevo/my_script/main/shell/auto-generate-docker-tls-ca.sh)</span>&quot;</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">需要自己更改下以下配置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">服务器主机名</span></span><br><span class="line">SERVER=&quot;10.0.8.11&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">密码</span></span><br><span class="line">PASSWORD=&quot;Super#Geostar,5&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">国家</span></span><br><span class="line">COUNTRY=&quot;CN&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">/etc/pki/tls/openssl.cnf，即 openssl 的配置文件路径并不一定适合所有系统</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以使用 find 命令找出自己系统中 openssl.cnf 的位置：</span></span><br><span class="line">OPENSSL_CONF=&quot;/etc/pki/tls/openssl.cnf&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">省份</span></span><br><span class="line">STATE=&quot;北京市&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">城市</span></span><br><span class="line">CITY=&quot;北京市&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">机构名称</span></span><br><span class="line">ORGANIZATION=&quot;大白兔技术股份有限公司&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">机构单位</span></span><br><span class="line">ORGANIZATIONAL_UNIT=&quot;大白兔技术股份有限公司&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">邮箱</span></span><br><span class="line">EMAIL=&quot;x@sowevo.com&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成CA密钥</span></span><br><span class="line">openssl genrsa -aes256 -passout pass:$PASSWORD  -out ca-key.pem 4096</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成CA证书</span></span><br><span class="line">openssl req -utf8 -new -x509 -passin &quot;pass:$PASSWORD&quot; -days 3650 -key ca-key.pem -sha256 -out ca-cert.pem -subj &quot;/C=$COUNTRY/ST=$STATE/L=$CITY/O=$ORGANIZATION/OU=$ORGANIZATIONAL_UNIT/CN=$SERVER/emailAddress=$EMAIL&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成服务端密钥</span></span><br><span class="line">openssl genrsa -out server-key.pem 4096</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成服务端证书签名的请求文件</span></span><br><span class="line">openssl req -subj &quot;/CN=$SERVER&quot; -new -key server-key.pem -out server-req.csr -reqexts SAN -config &lt;(cat $OPENSSL_CONF &lt;(printf &quot;\n[SAN]\nsubjectAltName=IP:$SERVER&quot;))</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成服务端证书</span></span><br><span class="line">openssl x509 -req -days 3650 -in server-req.csr -CA ca-cert.pem -CAkey ca-key.pem -passin &quot;pass:$PASSWORD&quot; -CAcreateserial -out server-cert.pem -extensions SAN -extfile &lt;(cat $OPENSSL_CONF &lt;(printf &quot;[SAN]\nsubjectAltName=IP:$SERVER&quot;))</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成客户端密钥</span></span><br><span class="line">openssl genrsa -out client-key.pem 4096</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成客户端证书签名的请求文件</span></span><br><span class="line">openssl req -subj &#x27;/CN=client&#x27; -new -key client-key.pem -out client-req.csr</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成客户端证书</span></span><br><span class="line">sh -c &#x27;echo &quot;extendedKeyUsage=clientAuth&quot; &gt;&gt; extfile.cnf&#x27;</span><br><span class="line">openssl x509 -req -days 3650 -in client-req.csr -CA ca-cert.pem -CAkey ca-key.pem  -passin &quot;pass:$PASSWORD&quot; -CAcreateserial -out client-cert.pem -extfile extfile.cnf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更改密钥权限</span></span><br><span class="line">chmod 0400 ca-key.pem server-key.pem client-key.pem</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更改证书权限</span></span><br><span class="line">chmod 0444 ca-cert.pem server-cert.pem client-cert.pem</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行脚本后,检查下文件是否存在</p>
+<ul>
+<li><code>ca-cert.pem</code></li>
+<li><code>server-cert.pem</code></li>
+<li><code>server-key.pem</code></li>
+</ul>
+</li>
+<li><p>修改docker配置文件<code>/usr/lib/systemd/system/docker.service</code></p>
+<p>在ExecStart属性后追加</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--tlsverify --tlscacert=<span class="regexp">/etc/</span>docker<span class="regexp">/cert/</span>ca-cert.pem --tlscert=<span class="regexp">/etc/</span>docker<span class="regexp">/cert/</span>server-cert.pem --tlskey=<span class="regexp">/etc/</span>docker<span class="regexp">/cert/</span>server-key.pem -H tcp:<span class="regexp">//</span><span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">2376</span> -H unix:<span class="regexp">//</span>var<span class="regexp">/run/</span>docker.sock </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启docker</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl daemon-reload</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl restart docker</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E5%A8%81%E8%81%94%E9%80%9A%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6/" rel="prev" title="威联通申请证书">
+      <i class="fa fa-chevron-left"></i> 威联通申请证书
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E5%B0%8F%E8%9C%97/" rel="next" title="小蜗">
+      小蜗 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sowevo"
+      src="https://up.sowevo.com/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Sowevo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sowevo" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Sowevo" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">不用备案了 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sowevo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
