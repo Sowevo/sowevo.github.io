@@ -62,7 +62,7 @@ git,zsh,ssh等终端应用没有问题
 
 编辑：`~/.mackup.cfg`
 
-```
+```ini
 [storage]
 # 使用的存储引擎
 engine = icloud
@@ -79,15 +79,17 @@ codex
 # git
 # vscode
 ```
+
 这样能确保：
-*   Mackup 只管Codex
+
+*   Mackup 只管 Codex
 *   不会误操作任何 GUI 应用
 *   不会触发 Sonoma 的偏好限制
 
 ### 自定义同步文件配置
 
 如果你想让 Mackup 管理更多 Codex 文件（如脚本、文档），可在`~/.mackup`下面新建文件`codex.cfg`，内容如下：
-```
+```ini
 [application]
 name = Codex
 
@@ -105,7 +107,7 @@ name = Codex
 
 
 
-## 首次使用流程
+## 使用流程
 
 ### 主力机：首次安装 link 模式
 
@@ -114,28 +116,30 @@ name = Codex
 ```shell
 brew install mackup
 ```
-2. 编写配置文件:
-
-    就上面例子中的配置文件
+2. 编写配置文件：就上面例子中的配置文件
 
 3. 在主力机上初始化：
-```
+```shell
 mackup link install
 ```
-它会：
-1.  将 Codex 配置复制到云盘
-2.  删除本地原始文件
-3.  生成 symlink 指向云端文件
 
-检查：
+它会进行如下操作
 
-    ls -l ~/.codex
+> - 将 Codex 配置复制到云盘
+> - 删除本地原始文件
+> - 生成 symlink 指向云端文件
 
+4. 最后检查：
+```shell
+ls -l ~/.codex
+```
 
 应看到：
 
-    auth.json -> ~/Library/.../Mackup/.codex/auth.json
-    config.toml -> ~/Library/.../Mackup/.codex/config.toml
+```shell
+auth.json -> ~/Library/.../Mackup/.codex/auth.json
+config.toml -> ~/Library/.../Mackup/.codex/config.toml
+```
 
 
 这说明 link 模式已成功启用。
@@ -143,25 +147,26 @@ mackup link install
 ### 新电脑：如何恢复 
 
 1. 安装 Mackup
-```
+```shell
 brew install mackup
 ```
 
 2. 等待 iCloud/Dropbox 同步完整的 Codex 备份
 
-3. 手动复制配置文件 
+3. 编写配置文件：还是上面例子中的配置文件
    
-   还是上面例子中的配置文件
-   
-   ⚠️Mackup不会同步自己的配置文件
-
-   需要自己处理配置文件的同步
+   > ⚠️Mackup不会同步自己的配置文件
+   > 需要自己处理配置文件的同步
 
 4. 执行恢复
 
-    mackup link
+  ```shell
+  mackup link
+  ```
 5. 检查
 
-    ls -l ~/.codex
+  ```shell
+  ls -l ~/.codex
+  ```
 
 看到 `->` 箭头表示恢复成功。
