@@ -10,7 +10,7 @@ tags:
 # Mackup 的使用方式
 
 Mackup 是一个用于备份和同步应用配置（dotfiles）的工具，支持 iCloud、Dropbox 等云存储。  
-自 macOS Sonoma 起，Mackup 的旧式 link 教程很多都不再适用，因此非常有必要重新梳理一套“安全且可用”的最佳实践。
+自 macOS Sonoma 起，Mackup 的旧的 link 教程很多都不再适用，因此非常有必要重新梳理一套“安全且可用”的最佳实践。
 
 本文基于最新 macOS 行为，整理了一套 **仅同步 CLI 工具（如 Codex）的最佳方案**，同时避免同步 GUI 应用偏好造成的问题。
 
@@ -21,7 +21,7 @@ Mackup 可以将应用配置文件同步到云盘，在多台电脑之间保持�
 - zsh
 - ssh
 - Codex（本文示例）
-
+<!-- more -->
 ## copy 模式 vs link 模式
 
 | 模式          | 行为                 | 实时同步 | 安全性         |
@@ -169,4 +169,9 @@ brew install mackup
   ls -l ~/.codex
   ```
 
-看到 `->` 箭头表示恢复成功。
+应看到：
+
+```shell
+auth.json -> ~/Library/.../Mackup/.codex/auth.json
+config.toml -> ~/Library/.../Mackup/.codex/config.toml
+```
