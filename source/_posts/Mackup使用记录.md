@@ -1,5 +1,5 @@
 ---
-title: Mackup 使用指南（Codex 实战）
+title: Mackup 使用指南
 date: 2025-11-27 00:22:01
 updated: 2025-11-27 00:55:00
 tags:
