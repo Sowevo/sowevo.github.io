@@ -7,48 +7,29 @@ tags:
   - macOS
   - Dotfiles
 ---
-* * *
-
-Mackup 的使用方式
-========================================
+# Mackup 的使用方式
 
 Mackup 是一个用于备份和同步应用配置（dotfiles）的工具，支持 iCloud、Dropbox 等云存储。  
 自 macOS Sonoma 起，Mackup 的旧式 link 教程很多都不再适用，因此非常有必要重新梳理一套“安全且可用”的最佳实践。
 
 本文基于最新 macOS 行为，整理了一套 **仅同步 CLI 工具（如 Codex）的最佳方案**，同时避免同步 GUI 应用偏好造成的问题。
 
-* * *
-
-Mackup 是什么？
-===========
-
+## Mackup 是什么？
 Mackup 可以将应用配置文件同步到云盘，在多台电脑之间保持统一环境。  
 尤其适合 CLI 工具，例如：
+- git
+- zsh
+- ssh
+- Codex（本文示例）
 
-*   git
-
-*   zsh
-
-*   ssh
-
-*   fzf
-
-*   neovim
-
-*   Codex（本文示例）
-
-
-* * *
-
-copy 模式 vs link 模式
-==================
+## copy 模式 vs link 模式
 
 | 模式          | 行为                 | 实时同步 | 安全性         |
 |-------------|--------------------|----|-------------|
 | **copy 模式** | 复制文件到云盘，再从云盘恢复     | 否  | 安全          |
 | **link 模式** | 文件替换为 symlink 指向云盘 | 是  | 对GUI应用可能有风险 |
 
-### 为什么 link 模式对 GUI 应用不安全？
+### GUI应用可能有风险
 
 macOS Sonoma 起，系统偏好设置（`~/Library/Preferences/*.plist`）必须写入本地真实文件，不能放 symlink 后面。  
 一旦 GUI 应用的 plist 用了 symlink：
@@ -61,28 +42,26 @@ macOS Sonoma 起，系统偏好设置（`~/Library/Preferences/*.plist`）必须
 
 *   应用可能无法启动
 
+### 终端应用没问题
 
-### git,codex,ssh等应用是否安全？
+git,zsh,ssh等终端应用没有问题
 
-是，完全安全。  
 这些应用使用的都是普通 JSON / TOML 文件：
+
 ```
 ~/.codex/auth.json
 ~/.codex/config.toml
 ```
 不属于 plist，不受系统限制，可放心使用 link 模式。
 
-* * *
-
-配置 Mackup 的例子
-===================
+## 配置 Mackup 的例子
 
 下面先给出最小化、安全的 Codex 配置
 
-------------------
+### mackup配置
 
 编辑：`~/.mackup.cfg`
-内容：
+
 ```
 [storage]
 # 使用的存储引擎
@@ -105,8 +84,7 @@ codex
 *   不会误操作任何 GUI 应用
 *   不会触发 Sonoma 的偏好限制
 
-2）自定义同步文件
-------------------------------
+### 自定义同步文件配置
 
 如果你想让 Mackup 管理更多 Codex 文件（如脚本、文档），可在`~/.mackup`下面新建文件`codex.cfg`，内容如下：
 ```
@@ -125,9 +103,14 @@ name = Codex
 
 这样你就可以自由扩展 Codex 的同步文件范围。
 
-主力机：首次安装 link 模式
-================
+
+
+## 首次使用流程
+
+### 主力机：首次安装 link 模式
+
 1. 安装 Mackup
+
 ```shell
 brew install mackup
 ```
@@ -157,12 +140,7 @@ mackup link install
 
 这说明 link 模式已成功启用。
 
-* * *
-
-新电脑：如何恢复 Codex？
-===============
-
-新设备的恢复流程：
+### 新电脑：如何恢复 
 
 1. 安装 Mackup
 ```
@@ -179,9 +157,11 @@ brew install mackup
 
    需要自己处理配置文件的同步
 
+4. 执行恢复
 
-### 4\. 执行恢复
     mackup link
-### 5\. 检查
+5. 检查
+
     ls -l ~/.codex
+
 看到 `->` 箭头表示恢复成功。
