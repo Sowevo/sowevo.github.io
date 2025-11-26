@@ -7,8 +7,6 @@ tags:
   - macOS
   - Dotfiles
 ---
-# Mackup 的使用方式
-
 Mackup 是一个用于备份和同步应用配置（dotfiles）的工具，支持 iCloud、Dropbox 等云存储。  
 自 macOS Sonoma 起，Mackup 的旧的 link 教程很多都不再适用，因此非常有必要重新梳理一套“安全且可用”的最佳实践。
 
