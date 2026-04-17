@@ -27,7 +27,7 @@ tags:
 - node的国内镜像源配置
 
   ```shell
-  $ npm config set registry https://registry.npm.taobao.org
+  $ npm config set registry https://registry.npmmirror.com
   ```
 
 - 从git克隆项目文件
@@ -48,7 +48,7 @@ tags:
   # 进入项目
   $ cd ~/sowevo.github.io
   # 更新子项目的代码
-  $ git submodule update --remote --merge
+  $ git submodule update --init --recursive
   # 如果有更新,提交一下
   $ git add themes/next
   $ git commit -m "themes submodule updated"
