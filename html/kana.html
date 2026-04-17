@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kana Speech</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e0e7ff; /* 更柔和的背景颜色 */
+        }
+        #app {
+            width: 98%;
+            height: 98%;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #content {
+            border: 2px solid #4f46e5; /* 更好的边框颜色 */
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 20px;
+            background-color: white;
+            width: 50vw; /* 设置宽度最大为 50% */
+            height: calc(50vw * 3 / 4); /* 高度设置为宽度的 3/4，确保宽高比为 4:3 */
+            max-height: 50vh; /* 最大高度为 50% */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: calc(50vw * 3 / 4 *0.7);
+            position: absolute;          /* 绝对定位 */
+            z-index: 10;                 /* 确保内容在历史记录之上 */
+        }
+        #history {
+            position: absolute;          /* 绝对定位 */
+            bottom: 10px;                /* 与底部间距 */
+            left: 50%;                   /* 居中 */
+            transform: translateX(-50%); /* 使其真正居中 */
+            width: 30vw;         /* 限制宽度 */
+            background: rgba(255, 255, 255, 0.8); /* 背景色稍透明 */
+            border-radius: 15px;         /* 圆角 */
+            padding: 10px;               /* 内边距 */
+            z-index: 5;                  /* 确保历史记录在内容下方 */
+            font-size: 20px;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0; /* 每项之间的间距 */
+            border-bottom: 1px solid #e5e7eb; /* 每项下方的分隔线 */
+        }
+        .history-item:last-child {
+            border-bottom: none; /* 最后一项去掉分隔线 */
+        }
+        .romaji, .hiragana, .katakana {
+            width: 33%; /* 每列的宽度占比 */
+            text-align: center;
+            color: #4f46e5; /* 修改文本颜色 */
+            font-weight: bold; /* 加粗文本 */
+        }
+    </style>
+</head>
+<body>
+<div id="app" @click="update">
+    <div id="content">
+        {{ selected_romaji }}
+    </div>
+    <div id="history" v-if="romajiHistory.length > 0">
+        <div v-for="(item, index) in romajiHistory" :key="index" class="history-item">
+            <div class="romaji">{{ item[0] }}</div>
+            <div class="hiragana">{{ item[1] }}</div>
+            <div class="katakana">{{ item[2] }}</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            selected_hiragana: null,
+            hiragana: ['あ','い','う','え','お','か','き','く','け','こ','さ','し','す','せ','そ','た','ち','つ','て','と','な','に','ぬ','ね','の','は','ひ','ふ','へ','ほ','ま','み','む','め','も','や','ゆ','よ','ら','り','る','れ','ろ','わ','を','ん'],
+            selected_katakana: null,
+            katakana: ['ア','イ','ウ','エ','オ','カ','キ','ク','ケ','コ','サ','シ','ス','セ','ソ','タ','チ','ツ','テ','ト','ナ','ニ','ヌ','ネ','ノ','ハ','ヒ','フ','ヘ','ホ','マ','ミ','ム','メ','モ','ヤ','ユ','ヨ','ラ','リ','ル','レ','ロ','ワ','ヲ','ン'],
+            selected_romaji: null,
+            romaji: ['a','i','u','e','o','ka','ki','ku','ke','ko','sa','shi','su','se','so','ta','chi','tsu','te','to','na','ni','nu','ne','no','ha','hi','fu','he','ho','ma','mi','mu','me','mo','ya','yu','yo','ra','ri','ru','re','ro','wa','wo','n'],
+            romajiHistory: [],
+            cancelled: false,
+            timeoutId: null
+        },
+        methods: {
+            update() {
+                const randomIndex = Math.floor(Math.random() * this.hiragana.length);
+
+                // 保存当前选中的值
+                const currentRomaji = this.selected_romaji;
+                const currentHiragana = this.selected_hiragana;
+                const currentKatakana = this.selected_katakana;
+
+                // 更新选中的字符
+                this.selected_hiragana = this.hiragana[randomIndex];
+                this.selected_katakana = this.katakana[randomIndex];
+                this.selected_romaji = this.romaji[randomIndex];
+
+                // 将之前选中的罗马字添加到历史记录
+                if (currentRomaji) {
+                    this.romajiHistory.push([currentRomaji, currentHiragana, currentKatakana]);
+                    // 限制历史记录的长度为 30
+                    if (this.romajiHistory.length > 30) {
+                        this.romajiHistory.shift(); // 移除最旧的项
+                    }
+                }
+
+                // 清空之前未读完的
+                this.cancelSpeak();
+                // 调用语音朗读功能
+                this.speakTimes(this.selected_hiragana, 5, 1000);
+            },
+            handleKeydown(event) {
+                if (event.key === " " || event.key === "Enter") {
+                    this.update();
+                }
+            },
+            speakTimes(text, repeatCount, delay) {
+                this.cancelled = false;
+                let count = 0;
+                const speak = () => {
+                    if (this.cancelled) return;
+                    if (count < repeatCount) {
+                        this.speakMessage(text);
+                        count++;
+                        this.timeoutId = setTimeout(speak, delay);
+                    }
+                };
+                speak();
+            },
+            speakMessage(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'ja-JP';
+                    utterance.rate = 0.8; // 调整语速
+                    // 获取可用的语音
+                    const voices = speechSynthesis.getVoices();
+                    // 查找日文语音
+                    const japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+                    if (japaneseVoice) {
+                        utterance.voice = japaneseVoice;
+                    }
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.error('Speech synthesis not supported');
+                }
+            },
+            cancelSpeak() {
+                this.cancelled = true;
+                if (this.timeoutId) {
+                    clearTimeout(this.timeoutId);
+                    this.timeoutId = null;
+                }
+                if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+            }
+        },
+        mounted() {
+            window.addEventListener('keydown', this.handleKeydown);
+        },
+        beforeDestroy() {
+            window.removeEventListener('keydown', this.handleKeydown);
+        }
+    });
+</script>
+</body>
+</html>
